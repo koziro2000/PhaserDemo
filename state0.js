@@ -6,6 +6,7 @@ demo.state0.prototype = {
         game.load.image('tree', 'assets/backgrounds/treeBG.png');
     },
     create:  function(){
+        
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.stage.backgroundColor="#ea1985";
         addChangeStateEventListeners();
