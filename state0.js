@@ -5,8 +5,7 @@ demo.state0.prototype = {
         game.load.spritesheet('adam', 'assets/spritesheets/adamSheet.png', 240, 370);
         game.load.image('tree', 'assets/backgrounds/treeBG.png');
     },
-    create:  function(){
-        
+    create:  function(){        
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.stage.backgroundColor="#ea1985";
         addChangeStateEventListeners();
