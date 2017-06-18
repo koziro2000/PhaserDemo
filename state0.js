@@ -1,4 +1,5 @@
 var demo = {}, centerX = 1500/2, centerY = 1000/2, adam, speed = 6;
+var isSwingSowrd = false, swingTime = 0;
 demo.state0 = function() {};
 demo.state0.prototype = {
     preload: function(){
@@ -47,6 +48,22 @@ demo.state0.prototype = {
         } 
         else if(game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
             adam.y += speed;
+        }
+        
+        if((game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))) {
+            if(!isSwingSowrd && swingTime == 0) {
+                console.log('Swing Sword');                
+                isSwingSowrd = true;
+            } else {
+                console.log('Already Swinging');
+            }
+        }
+        
+        if (isSwingSowrd && swingTime >= 60) {
+            isSwingSowrd = false;
+            swingTime = 0;
+        } else if (isSwingSowrd && swingTime < 60) {
+            swingTime += 1;
         }
     }
 };
