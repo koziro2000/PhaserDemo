@@ -2,8 +2,8 @@ demo.state5 = function() {};
 demo.state5.prototype = {
     preload: function(){},
     create:  function(){
-        game.stage.backgroundColor="#d13887";
-        console.log('state5');
+        game.stage.backgroundColor="#b5ac07";
+        addChangeStateEventListeners();
     },
     update: function(){}
 };
