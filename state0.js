@@ -5,11 +5,10 @@ demo.state0 = function() {};
 demo.state0.prototype = {
     preload: function(){
         game.load.spritesheet('adam', 'assets/spritesheets/Daddy.png', 320, 320);
-        game.load.image('tree', 'assets/backgrounds/treeBG.png');
+        game.load.image('tree', 'assets/backgrounds/streetBG.png');
     },
     create:  function(){        
         game.physics.startSystem(Phaser.Physics.ARCADE);
-        game.stage.backgroundColor="#ea1985";
         addChangeStateEventListeners();
         game.world.setBounds(0, 0, 2813, 1000);
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
