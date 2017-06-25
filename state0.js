@@ -38,8 +38,10 @@ demo.state0.prototype = {
             adam.animations.play('walk', 14, true);
         }
         else {
-            adam.animations.stop('walk');
-            if(!isSwingSowrd) adam.frame = 0;
+            if(!isSwingSowrd) {
+                adam.animations.stop('walk');
+                adam.frame = 0;
+            }
         }
 
         if(game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
@@ -53,21 +55,15 @@ demo.state0.prototype = {
         }
         
         if((game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))) {
-            if(!isSwingSowrd && swingTime == 0) {
-                adam.animations.play('punch');
+            //adam.animations.play('punch');
+            if(!isSwingSowrd) {
                 isSwingSowrd = true;
-            } else {
-                console.log('Already Swinging');
+                adam.animations.play('punch').onComplete.add(
+                    function() {
+                        isSwingSowrd = false;
+                    }
+                );             
             }
-        }
-        
-        if (isSwingSowrd && swingTime >= swingDuration) {
-            isSwingSowrd = false;
-            swingTime = 0;
-            adam.animations.stop('punch');
-            adam.frame = 0;
-        } else if (isSwingSowrd && swingTime < swingDuration) {
-            swingTime += 1;
         }
     }
 };
