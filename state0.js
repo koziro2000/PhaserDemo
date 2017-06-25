@@ -25,48 +25,63 @@ demo.state0.prototype = {
         adam.animations.add('punch', [4, 5, 6]);
         game.camera.follow(adam);
         game.camera.deadzone = new Phaser.Rectangle(centerX - 300, 0, 600, 1000);
+        
+        this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+        this.rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+        this.downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+        this.upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
+        this.spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        
+        this.spaceKey.onDown.add(throwPunch, this);
+
+        //  Stop the following keys from propagating up to the browser
+        game.input.keyboard.addKeyCapture([ Phaser.Keyboard.LEFT, Phaser.Keyboard.RIGHT, Phaser.Keyboard.SPACEBAR, Phaser.Keyboard.UP, Phaser.Keyboard.DOWN]);
     },
     update: function(){
-        if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+        if(this.rightKey.isDown) {
             adam.scale.setTo(scaleSetVal, scaleSetVal);
             adam.x += speed;
-            adam.animations.play('walk', 14, true);
         } 
-        else if(game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+        else if(this.leftKey.isDown) {
             adam.scale.setTo(-scaleSetVal, scaleSetVal);
             adam.x -= speed;
-            adam.animations.play('walk', 14, true);
-        }
-        else {
-            if(!isSwingSowrd) {
-                adam.animations.stop('walk');
-                adam.frame = 0;
-            }
         }
 
-        if(game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+        if(this.upKey.isDown) {
             adam.y -= speed;
             if (adam.y < 395) {
                 adam.y = 395;
             }            
         } 
-        else if(game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
+        else if(this.downKey.isDown) {
             adam.y += speed;            
         }
         
-        if((game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))) {
-            //adam.animations.play('punch');
-            if(!isSwingSowrd) {
-                isSwingSowrd = true;
-                adam.animations.play('punch').onComplete.add(
-                    function() {
-                        isSwingSowrd = false;
-                    }
-                );             
+        if (this.leftKey.isDown || this.rightKey.isDown || this.upKey.isDown || this.downKey.isDown){
+            adam.animations.play('walk', 14, true);    
+        } else {
+            if (!isSwingSowrd) {
+                adam.animations.stop();
+                adam.frame = 0;            
             }
         }
     }
 };
+
+function throwPunch() {
+    if (this.leftKey.isDown || this.rightKey.isDown || this.upKey.isDown || this.downKey.isDown){
+        return;
+    }
+    console.log("throwPunch!");
+    isSwingSowrd = true;
+    
+    adam.animations.play('punch').onComplete.add(
+        function() {
+            console.log("throw punch!");
+            isSwingSowrd = false;
+        }
+    );
+}
 
 function changeState(i, stateNum) {
     console.log('state' + stateNum);
