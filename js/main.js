@@ -19,13 +19,32 @@ var GameState = {
         
         this.background = this.game.add.sprite(0, 0, 'background');
         
-        this.pig = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'pig');
-        this.pig.anchor.setTo(0.5);
-        this.pig.inputEnabled = true;
-        this.pig.input.pixelPerfectClick = true;
-        this.pig.events.onInputDown.add(this.animateAnimal, this);
+        var animalData = [
+          {key: 'chicken', text: 'CHICKEN'},
+          {key: 'horse', text: 'HORSE'},
+          {key: 'pig', text: 'PIG'},
+          {key: 'sheep', text: 'SHEEP'}
+        ];
         
+        this.animals = this.game.add.group();
+        
+        var self = this;
+        var animal;
+        
+        animalData.forEach(function(element){
+            animal = self.animals.create(-1000, self.game.world.centerY, element.key);
+            
+            animal.customParams = {text: element.text};
+            animal.anchor.setTo(0.5);
+            
+            animal.inputEnabled = true;
+            animal.input.pixelPerfectClick = true;
+            animal.events.onInputDown.add(self.animateAnimal, this);
+        });
 
+        this.currentAnimal = this.animals.next();
+        this.currentAnimal.position.set(this.game.world.centerX, self.game.world.centerY);
+        
         this.leftArrow = this.game.add.sprite(60, this.game.world.centerY, 'arrow');
         this.leftArrow.anchor.setTo(0.5);
         this.leftArrow.scale.x = -1;
@@ -46,11 +65,34 @@ var GameState = {
     },
     update: function() {
     },
-    switchAnimal: function(sprite, event) {
-        console.log('move animal');
-    },
     animateAnimal: function(sprite, event) {
         console.log('animate animal');
+    },
+    switchAnimal: function(sprite, event) {
+        var newAnimal, endX;
+        
+        if(sprite.customParams.direction > 0) {
+            newAnimal = this.animals.next();
+            newAnimal.x = -newAnimal.width/2;
+            endX = 640 + this.currentAnimal.width/2;
+        } else {
+            newAnimal = this.animals.previous();
+            newAnimal.x = 640 + newAnimal.width/2;
+            endX = -this.currentAnimal.width/2;
+        }
+        
+        console.log(this.currentAnimal.customParams.text + ' ' + newAnimal.customParams.text);
+
+        var newAnimalMovement = game.add.tween(newAnimal);
+        newAnimalMovement.to({x: this.game.world.centerX}, 1000);
+        newAnimalMovement.start();
+        
+        var currentAnimalMovement = game.add.tween(this.currentAnimal);
+        currentAnimalMovement.to({x: endX}, 1000);
+        currentAnimalMovement.start();
+        
+        this.currentAnimal = newAnimal;
+        
     }
 };
 
