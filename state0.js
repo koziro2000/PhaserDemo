@@ -22,7 +22,7 @@ demo.state0.prototype = {
         game.physics.enable(adam);
         adam.body.collideWorldBounds = true;
         adam.animations.add('walk', [0, 1, 2, 3]);
-        adam.animations.add('punch', [4, 5, 6]);
+        adam.animations.add('punch', [4, 5, 6, 7, 8]);
         game.camera.follow(adam);
         game.camera.deadzone = new Phaser.Rectangle(centerX - 300, 0, 600, 1000);
         
@@ -38,6 +38,13 @@ demo.state0.prototype = {
         game.input.keyboard.addKeyCapture([ Phaser.Keyboard.LEFT, Phaser.Keyboard.RIGHT, Phaser.Keyboard.SPACEBAR, Phaser.Keyboard.UP, Phaser.Keyboard.DOWN]);
     },
     update: function(){
+/*
+        if (this.spaceKey.isDown) {
+            throwPunch();
+            return;
+        }
+*/
+        
         if(this.rightKey.isDown) {
             adam.scale.setTo(scaleSetVal, scaleSetVal);
             adam.x += speed;
@@ -58,7 +65,7 @@ demo.state0.prototype = {
         }
         
         if (this.leftKey.isDown || this.rightKey.isDown || this.upKey.isDown || this.downKey.isDown){
-            adam.animations.play('walk', 14, true);    
+            adam.animations.play('walk', 12, true);    
         } else {
             if (!isSwingSowrd) {
                 adam.animations.stop();
@@ -72,10 +79,8 @@ function throwPunch() {
     if (this.leftKey.isDown || this.rightKey.isDown || this.upKey.isDown || this.downKey.isDown){
         return;
     }
-    console.log("throwPunch!");
     isSwingSowrd = true;
-    
-    adam.animations.play('punch').onComplete.add(
+    adam.animations.play('punch', 12, false).onComplete.add(
         function() {
             console.log("throw punch!");
             isSwingSowrd = false;
